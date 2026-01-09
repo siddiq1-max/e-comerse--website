@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Order Placed{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-top: 4rem;">
+    <h1 style="color: #10b981; margin-bottom: 1rem;">Order Placed Successfully!</h1>
+    <p>Your order number is #{{ order.id }}.</p>
+    <a href="{% url 'store:product_list' %}" class="btn" style="margin-top: 2rem;">Continue Shopping</a>
+</div>
+{% endblock %}

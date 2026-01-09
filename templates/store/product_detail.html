@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="image-container">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="detail-image">
+        {% else %}
+        <div class="detail-image"
+            style="height: 400px; background: #eee; display: flex; align-items: center; justify-content: center;">
+            No Image
+        </div>
+        {% endif %}
+    </div>
+    <div class="info-container">
+        <h1 style="font-size: 2rem; margin-bottom: 1rem;">{{ product.name }}</h1>
+        <p style="color: #666; margin-bottom: 1rem;">
+            <a href="{% url 'store:product_list' %}" style="text-decoration: underline;">{{ product.category.name }}</a>
+        </p>
+        <p class="product-price" style="font-size: 1.5rem; margin-bottom: 2rem;">${{ product.price }}</p>
+
+        <p style="margin-bottom: 2rem; line-height: 1.8;">{{ product.description|linebreaks }}</p>
+
+        <form action="{% url 'store:cart_add' product.id %}" method="post"> <!-- Placeholder action -->
+            {% csrf_token %}
+            <button type="submit" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">Add to Cart</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Order History{% endblock %}
+
+{% block content %}
+<h1>My Orders</h1>
+{% if orders %}
+<div style="margin-top: 2rem;">
+    {% for order in orders %}
+    <div
+        style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; padding: 1.5rem;">
+        <div
+            style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem;">
+            <div>
+                <strong>Order #{{ order.id }}</strong>
+                <span style="color: #666; margin-left: 1rem;">{{ order.created|date:"M d, Y" }}</span>
+            </div>
+            <div>
+                <strong>Total: ${{ order.get_total_cost }}</strong>
+            </div>
+        </div>
+        <table style="width: 100%; font-size: 0.9rem;">
+            {% for item in order.items.all %}
+            <tr>
+                <td style="padding: 0.5rem 0;">{{ item.product.name }}</td>
+                <td style="padding: 0.5rem 0;">x{{ item.quantity }}</td>
+                <td style="padding: 0.5rem 0; text-align: right;">${{ item.price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+            State: {% if order.paid %}Paid{% else %}Pending{% endif %} |
+            Ship to: {{ order.city }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p style="margin-top: 2rem; color: #666;">You haven't placed any orders yet.</p>
+{% endif %}
+{% endblock %}

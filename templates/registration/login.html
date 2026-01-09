@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h1 style="margin-bottom: 2rem; text-align: center;">Login</h1>
+    <form method="post" action=".">
+        {% csrf_token %}
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div style="color: red; font-size: 0.9rem; margin-top: 0.2rem;">
+                {{ field.errors.0 }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+        <div style="color: red; margin-bottom: 1rem;">
+            {{ form.non_field_errors.0 }}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Login</button>
+    </form>
+    <p style="text-align: center; margin-top: 1.5rem;">
+        Don't have an account? <a href="{% url 'accounts:register' %}" style="color: var(--primary-color);">Register
+            here</a>
+    </p>
+</div>
+
+<script>
+    // Add form-control class to all inputs
+    document.querySelectorAll('input').forEach(input => {
+        input.classList.add('form-control');
+    });
+</script>
+{% endblock %}

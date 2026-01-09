@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+{% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; gap: 2rem; margin-top: 2rem;">
+    <aside style="width: 250px;">
+        <h3>Categories</h3>
+        <ul style="margin-top: 1rem;">
+            <li style="margin-bottom: 0.5rem;">
+                <a href="{% url 'store:product_list' %}" class="category-link {% if not category %}active{% endif %}">
+                    All
+                </a>
+            </li>
+            {% for c in categories %}
+            <li style="margin-bottom: 0.5rem;">
+                <a href="{{ c.get_absolute_url }}"
+                    class="category-link {% if category and category.slug == c.slug %}active{% endif %}">
+                    {{ c.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <section style="flex: 1;">
+        <h2>{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h2>
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <a href="{% url 'store:product_detail' product.slug %}">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                    {% else %}
+                    <div class="product-image"
+                        style="background: #eee; display: flex; align-items: center; justify-content: center;">
+                        No Image
+                    </div>
+                    {% endif %}
+                </a>
+                <div class="product-info">
+                    <a href="{% url 'store:product_detail' product.slug %}" class="product-title">{{ product.name }}</a>
+                    <p class="product-price">${{ product.price }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p>No products found.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

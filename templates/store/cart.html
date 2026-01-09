@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Your Cart{% endblock %}
+
+{% block content %}
+<h1>Shopping Cart</h1>
+{% if cart|length > 0 %}
+<div style="margin-top: 2rem;">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="border-bottom: 2px solid #e5e7eb; text-align: left;">
+                <th style="padding: 1rem;">Product</th>
+                <th style="padding: 1rem;">Quantity</th>
+                <th style="padding: 1rem;">Price</th>
+                <th style="padding: 1rem;">Total</th>
+                <th style="padding: 1rem;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            {% with product=item.product %}
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+                <td style="padding: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}"
+                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                        {% endif %}
+                        {{ product.name }}
+                    </div>
+                </td>
+                <td style="padding: 1rem;">
+                    {{ item.quantity }}
+                </td>
+                <td style="padding: 1rem;">${{ item.price }}</td>
+                <td style="padding: 1rem;">${{ item.total_price }}</td>
+                <td style="padding: 1rem;">
+                    <a href="{% url 'store:cart_remove' product.id %}"
+                        style="color: #ef4444; font-weight: 500;">Remove</a>
+                </td>
+            </tr>
+            {% endwith %}
+            {% endfor %}
+            <tr style="font-weight: bold; background-color: #f9fafb;">
+                <td colspan="3" style="padding: 1rem; text-align: right;">Total:</td>
+                <td style="padding: 1rem;">${{ cart.get_total_price }}</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+        <a href="{% url 'store:product_list' %}" class="btn btn-secondary" style="background-color: #6b7280;">Continue
+            Shopping</a>
+        <a href="{% url 'store:checkout' %}" class="btn">Proceed to Checkout</a>
+    </div>
+</div>
+{% else %}
+<div style="text-align: center; margin-top: 4rem;">
+    <p style="font-size: 1.2rem; color: #6b7280; margin-bottom: 2rem;">Your cart is empty.</p>
+    <a href="{% url 'store:product_list' %}" class="btn">Start Shopping</a>
+</div>
+{% endif %}
+{% endblock %}
